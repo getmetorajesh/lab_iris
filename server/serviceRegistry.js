@@ -2,15 +2,15 @@
 
 class ServiceRegistry {
 
-    constructor() {
+    constructor(timeout) {
         this._services = [];
-        this._timeout = 30;
+        this._timeout = timeout;
     }
 
     add(intent, ip, port) {
-        const key = intent+ip+port;
+        const key = intent + ip + port;
 
-        if(!this._services[key]) {
+        if (!this._services[key]) {
             this._services[key] = {};
             this._services[key].timestamp = Math.floor(new Date() / 1000);
             this._services[key].ip = ip;
@@ -34,17 +34,17 @@ class ServiceRegistry {
 
     get(intent) {
         this._cleanup();
-        for(let key in this._services) {
-            if(this._services[key].intent == intent) return this._services[key];
+        for (let key in this._services) {
+            if (this._services[key].intent == intent) return this._services[key];
         }
         return null;
     }
 
     _cleanup() {
         const now = Math.floor(new Date() / 1000);
-        
-        for(let key in this._services) {
-            if(this._services[key].timestamp + this._timeout < now) {
+
+        for (let key in this._services) {
+            if (this._services[key].timestamp + this._timeout < now) {
                 console.log(`Removed service for intent ${this._services[key].intent}`);
                 delete this._services[key];
             }
