@@ -7,8 +7,8 @@ const http = require('http');
 const server = http.createServer(service);
 
 const witToken = config.witToken;
-const witClient = require('../server/witClient')(witToken);
-
+const WitClient = require('../server/witClient');
+const witClient = new WitClient(witToken);
 const slackToken = config.slackToken;
 const slackLogLevel = 'verbose';
 
@@ -19,5 +19,5 @@ rtm.start();
 slackClient.addAuthenticatedHandler(rtm, () => server.listen(3000));
 
 server.on('listening', function() {
-  console.log(`IRIS is listening on ${server.address().port} in ${service.get('env')} mode.`);
+    console.log(`IRIS is listening on ${server.address().port} in ${service.get('env')} mode.`);
 });
